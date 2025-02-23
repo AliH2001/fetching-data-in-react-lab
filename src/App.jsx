@@ -1,10 +1,40 @@
-// src/App.jsx
+import './App.css'
+import StarshipCard from './components/StarshipCard'
+import StarshipSearch from './components/StarshipSearch'
+import StarshipList from './components/StarshipList'
+import { useState, useEffect } from 'react'
+import * as starshipService from './services/starshipService'
 
 const App = () => {
+    const [starships, setStarships] = useState([])
+    const [search, setSearch] = useState('')
 
-  return (
-    <h1>Hello world!</h1>
-  );
+    const fetchData = async () => {
+        const data = await starshipService.index()
+        setStarships(data.results)
+    }
+
+
+    useEffect(() => {
+
+        fetchData()
+
+    }, [])
+
+    const handleSearch = (formData) => {
+        setSearch(formData)
+    }
+
+    return (
+        <>
+            <h1>Star Wars API</h1>
+
+            <StarshipSearch handleSearch={handleSearch} />
+            <StarshipList starships={starships} search={search} />
+        </>
+    )
 }
 
-export default App
+
+
+export default App 
